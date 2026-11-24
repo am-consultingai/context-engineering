@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./setup.sh:*)",
+      "Bash(./setup.sh)",
+      "Bash(./run.sh:*)",
+      "Bash(./run.sh)",
+      "Bash(./continue.sh:*)",
+      "Bash(./stop.sh:*)",
+      "Bash(./stop.sh)",
+      "Bash(./reset-envs.sh)",
+      "Read",
+      "Grep",
+      "Glob",
+      "Write(runs/**)",
+      "Edit(runs/**)",
+      "Edit(task/prompt.txt)",
+      "Edit(experiment.env)"
+    ],
+    "deny": [
+      "Read(~/.config/context-engineering/**)",
+      "Edit(envs/**)",
+      "Write(envs/**)"
+    ]
+  }
+}

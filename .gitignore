@@ -1,0 +1,18 @@
+# Experiment state (rebuilt / regenerated locally)
+/envs/
+/runs/
+/agent-config/generated/
+
+# Credentials never live in the repo (they are in ~/.config/context-engineering/).
+# Kept as a safety net in case an old .auth/ is recreated.
+/.auth/
+*.token
+*api-key*
+.env
+.env.*
+
+# Python / Node
+__pycache__/
+*.pyc
+node_modules/
+dist/

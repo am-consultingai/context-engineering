@@ -1,0 +1,42 @@
+{
+  "$comment": "Forced settings for experiment agents. setup.sh renders this per condition into generated/settings-<cond>.json ({{...}} are absolute paths). Applied via --settings, on top of an empty private CLAUDE_CONFIG_DIR, so the user's own ~/.claude is never read or written.",
+  "autoMemoryEnabled": false,
+  "claudeMdExcludes": [
+    "{{HARNESS}}/CLAUDE.md",
+    "{{HARNESS}}/CLAUDE.local.md",
+    "{{HARNESS}}/.claude/CLAUDE.md",
+    "{{HARNESS}}/envs/CLAUDE.md",
+    "{{PARENT}}/CLAUDE.md",
+    "{{PARENT}}/.claude/CLAUDE.md"
+  ],
+  "permissions": {
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Read(/{{SOURCE}}/**)",
+      "Edit(/{{SOURCE}}/**)",
+      "Read(/{{HOME}}/.claude/**)",
+      "Edit(/{{HOME}}/.claude/**)",
+      "Read(/{{HOME}}/.claude.json)",
+      "Read(/{{OTHER_ENV}}/**)",
+      "Edit(/{{OTHER_ENV}}/**)",
+      "Read(/{{HARNESS}}/CLAUDE.md)",
+      "Read(/{{HARNESS}}/README.md)",
+      "Read(/{{HARNESS}}/rubric.md)",
+      "Read(/{{HARNESS}}/experiment.env)",
+      "Read(/{{HARNESS}}/*.sh)",
+      "Read(/{{HARNESS}}/task/**)",
+      "Read(/{{HARNESS}}/lib/**)",
+      "Read(/{{HARNESS}}/agent-config/**)",
+      "Read(/{{HOME}}/.config/context-engineering/**)",
+      "Read(/{{HARNESS}}/.claude/**)",
+      "Edit(/{{HARNESS}}/*)",
+      "Edit(/{{HARNESS}}/task/**)",
+      "Edit(/{{HARNESS}}/lib/**)",
+      "Edit(/{{HARNESS}}/agent-config/**)"
+    ]
+  },
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  }
+}
