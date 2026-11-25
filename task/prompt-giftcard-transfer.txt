@@ -1,0 +1,15 @@
+Merchandisers need to move balance between gift cards (e.g. merge two cards
+a customer owns). Add this to the core API:
+
+- A staff-only mutation that transfers an amount from one gift card to
+  another (same currency; source must have enough balance and both cards
+  must be active), plus a bulk variant that performs many transfers in one
+  call.
+- Balances must be exactly right under concurrent transfers, checkout
+  usage and refunds touching the same cards: no lost updates, no negative
+  balances, no deadlocks.
+- Both cards' history must record the transfer, and apps must receive a
+  webhook event for every completed transfer.
+
+Follow our existing backend conventions exactly. Before changing any code,
+give me your plan (backend only; tell me if the dashboard needs anything).

@@ -1,0 +1,15 @@
+Add "Notify me when back in stock":
+
+- On the storefront product page, when the selected variant is out of stock,
+  a customer can enter their email and click "Notify me". The same email can't
+  be registered twice for the same variant.
+- In the dashboard, merchandisers can see on each variant how many customers
+  are waiting.
+- When that variant comes back in stock, an external app (our email provider
+  integration) must be told which emails to notify, and those requests are
+  then cleared.
+
+This must be safe under heavy concurrent traffic and follow our existing
+conventions. Treat it as a real, production-quality feature across the
+backend, the dashboard and the storefront. Before changing any code, give me
+your plan.

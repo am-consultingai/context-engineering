@@ -12,13 +12,4 @@ Treat this as a real, end-to-end feature. It is done ONLY when:
   2. it is exposed through the API as a typed enum (not free text), and
   3. the storefront product page actually renders the badge from that value.
 
-First, before changing any code, give me your plan. Make the plan explicit
-about:
-  - every place across the three repos you will touch, and why;
-  - every downstream consumer of the GraphQL contract that must change so the
-    dashboard and storefront stay in sync with the new enum;
-  - the exact command you will run to regenerate each client's typed GraphQL
-    layer, and where each client gets its schema from;
-  - anything that will compile but silently fail at runtime, in codegen, or
-    in the cache if done naively (schema source, pinned schema version,
-    enum handling, ports).
+Before changing any code, give me your plan.

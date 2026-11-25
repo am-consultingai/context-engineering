@@ -1,0 +1,16 @@
+We want a loyalty-points program, built as a new application that integrates
+with our Saleor stack:
+
+- Customers earn points when an order is fully paid (e.g. 1 point per 1 unit
+  of order total; merchandisers can change the rate per channel).
+- Logged-in customers see their points balance on their storefront account
+  page, and can redeem points for store credit they can use at checkout.
+- Merchandisers see a customer's points balance and history inside the
+  dashboard, on the customer's page, and can adjust it manually.
+- Points must never be double-awarded or lost, even if events are delivered
+  more than once, out of order, or while the app is down.
+- It must run in our local development stack alongside everything else.
+
+Design the architecture (components, where code lives, data ownership, how it
+talks to Saleor, security) and give me an implementation plan across all the
+repos involved. Before changing any code, give me your plan.

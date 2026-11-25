@@ -1,0 +1,13 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index e1a958d..a0f8016 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -4,7 +4,7 @@
+ 
+ ###  API versioning
+ 
+-- Check last git tag to find what version we are branched from (e.g. 3.22 tag). Based on that, add description to new fields with ADDED_IN_{VERSION} clause
++- Use the development version in `pyproject.toml` (e.g. `3.24.0-a.0` → `ADDED_IN_324`, defined in `saleor/graphql/core/descriptions.py`) and add it to the description of new fields with the ADDED_IN_{VERSION} clause
+ 
+ 
+ ### GraphQL permissions

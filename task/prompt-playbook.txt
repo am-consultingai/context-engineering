@@ -1,0 +1,13 @@
+Write our team's "cross-repo change playbook": the exact, step-by-step way
+an engineer must add a new field, a new mutation and a new webhook event
+across the backend, the dashboard and the storefront in this workspace.
+
+For each repo include: the conventions and rules we follow (code patterns,
+naming, versioning/annotation, permissions, error handling, concurrency,
+migrations, tests and how to write them), the exact commands to run (codegen,
+tests, lint, i18n, changelog/changesets), the files that must change, and a
+pre-merge checklist. Also cover the order of work across repos and the traps
+that compile fine but break later.
+
+Engineers will follow it literally, so every rule, command and path must be
+correct for these repos. Don't change any code.

@@ -4,7 +4,8 @@
 #
 # Usage: ./continue.sh [--mode plan|implement] "message"
 #   --mode   defaults to the run's mode. Use implement to let agents edit + run commands.
-# Only the run whose state the envs currently hold can be continued (see envs/.owner).
+# Only the run whose state the envs currently hold can be continued (see runs/.owner).
+# Like run.sh, the new turn is added to the blind packet; use ./unblind.sh after scoring.
 source "$(dirname "$0")/lib/common.sh"
 
 MODE_OVERRIDE=""
@@ -39,7 +40,8 @@ for c in $CONDITIONS; do
     tdir="$adir/turns/$k"
     run_agent "$c" "$adir" "$tdir" "$MODE" "$MSG" "$(cat "$adir/session_id")"
     capture_changes "$c" "$tdir"
-    py turn --trace "$tdir/trace.jsonl" --agent-dir "$adir" --env-root "$ENVS/$c" \
+    py turn --trace "$tdir/trace.jsonl" --agent-dir "$adir" --env-root "$(env_root "$c")" \
+      --cfg-dir "$(env_home "$c")" --lab-root "$LAB_ROOT" \
       --harness "$HARNESS" --source "$SOURCE_WORKSPACE" --mode "$MODE" --out "$tdir"
   ) &
   log "  agent '$c' turn $k (pid $!)"
@@ -48,5 +50,7 @@ wait
 
 after="$(user_state_fingerprint)"
 [ "$before" = "$after" ] || { echo "CHANGED during continue — investigate!" >> "$RUN/user-state-check.txt"; warn "your ~/.claude state changed!"; }
+py summary "$RUN" --quiet
 echo
-py summary "$RUN"
+py blind "$RUN"
+log "Next: score the new blind packet with rubric.md, then ./unblind.sh"

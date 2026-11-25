@@ -1,0 +1,16 @@
+We're taking this whole stack to production for the first time: the core API
+(plus its background workers), the dashboard and the storefront, each as its
+own container/service behind HTTPS on its own domain
+(api.example.com, admin.example.com, shop.example.com).
+
+Give me a production deployment plan:
+- every service we need to run and how many instances of each,
+- for each service, every environment variable / secret it needs in
+  production, with what value or what it must match,
+- which settings are dangerous if left at their current defaults,
+- which values must agree across services (and what breaks if they don't),
+- the build and rollout order, including database migrations and first-run
+  setup, and how product changes keep reaching the storefront.
+
+Base this on how these repos are actually configured. Don't change any code;
+give me the plan.

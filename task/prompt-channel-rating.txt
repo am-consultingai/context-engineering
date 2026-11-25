@@ -1,0 +1,12 @@
+We sell through several sales channels and want product ratings to be
+per channel instead of global:
+
+- A merchandiser should be able to set a product's rating separately for
+  each channel the product is available in.
+- The customer storefront product page should show the rating for the
+  channel the customer is browsing.
+- Existing ratings must not be lost, and existing API consumers must keep
+  working while they migrate.
+
+Treat this as a real, end-to-end feature across the backend, the dashboard
+and the storefront. Before changing any code, give me your plan.

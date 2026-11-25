@@ -1,9 +1,11 @@
 # Comparison rubric (for the main session only — agents are denied read access)
 
-Score each agent's `plan.md` per section. Use ✅ (covered correctly), ⚠️ (partial / vague),
-❌ (missing or wrong). **Fact-check against the code before scoring**: the code in
-`envs/without/` and `envs/with/` is identical, so check claims there (read-only). Never
-penalize a claim you haven't checked; never reward one that is false.
+Score the two plans **blind** (`blind/<item>/A.md` vs `B.md`) for sections A–E, then unblind
+(`./unblind.sh`) and add section F. Use ✅ (covered correctly), ⚠️ (partial / vague),
+❌ (missing or wrong). **Fact-check against the code before scoring**: the code in both envs
+is identical (`$LAB_ROOT/<label>/saleor-workspace`), so check claims in either (read-only).
+Never penalize a claim you haven't checked; never reward one that is false.
+Score what the plan gets right about the code, not whether it mentions `arch/`.
 
 ## A. Done criteria (from the task)
 1. Label stored per product, constrained to the fixed set (model field + choices + migration).
@@ -48,6 +50,7 @@ leak-audit status (a FAIL invalidates that agent's result — say so prominently
 
 ## Output format
 1. One-line verdict (which condition did better, and by how much).
-2. Scorecard table: rows = A1–A3, B-saleor, B-dashboard, B-storefront, C, D, E (error count), F; columns = without | with.
+2. Scorecard table: rows = A1–A3, B-saleor, B-dashboard, B-storefront, C, D, E (error count), F;
+   columns = A | B in `blind-scores.md`, then without | with in `report.md`.
 3. Up to 5 bullets: the most important differences, each tied to evidence (file/line or trace step).
 4. Caveats: single run vs repeats, model, mode, anything that weakens the conclusion.

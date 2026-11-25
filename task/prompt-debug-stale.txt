@@ -1,0 +1,10 @@
+Merchandisers are complaining: after they edit a product in the dashboard
+(for example change its name, description or price), our local storefront
+keeps showing the old content for a long time — sometimes close to an hour.
+A hard refresh doesn't help.
+
+Find out why this happens in our setup and fix it, so that storefront product
+pages reflect a product change within seconds of saving it in the dashboard.
+
+Treat this as a real fix for the way we run the stack locally, not a
+workaround. Before changing any code, give me your diagnosis and your plan.

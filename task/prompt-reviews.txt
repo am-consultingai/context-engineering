@@ -1,0 +1,16 @@
+Add product reviews:
+
+- Logged-in customers who bought a product can leave one review per product
+  (1–5 stars + text). They can edit or delete their own review.
+- Merchandisers moderate reviews in the dashboard (approve / reject, see a
+  queue of pending reviews, filter by product and rating).
+- The storefront product page shows the approved reviews (paginated) and the
+  average rating + count; category pages can be sorted and filtered by
+  average rating.
+- Average rating and count must stay correct under concurrent submissions,
+  and the storefront must reflect a moderation decision promptly.
+- Apps must be notified when a review is approved.
+
+Follow our existing conventions in every repo. Treat it as a real,
+production-quality feature across the backend, the dashboard and the
+storefront. Before changing any code, give me your plan.

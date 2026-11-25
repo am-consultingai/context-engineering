@@ -1,0 +1,13 @@
+A senior engineer joins the team tomorrow and will own cross-repo changes in
+this workspace. Write them an accurate technical onboarding guide:
+
+- what each repo/component is, its stack and versions, and its key entry points,
+- exactly how the components talk to each other at runtime (protocols, URLs,
+  ports, auth), and how the API contract flows into each client's generated code,
+- how to run the full stack locally and the known gotchas,
+- how config/env works in each component,
+- CI per repo, and what CI does NOT catch,
+- the top risks when changing something that crosses repos.
+
+Accuracy matters more than length: they will rely on every file path, port,
+command and version you state. Don't change any code.

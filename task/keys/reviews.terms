@@ -1,0 +1,20 @@
+# Automatic rule coverage for task/keys/reviews.md. One rule per line: label<TAB>regex (case-insensitive).
+# A plan "covers" a rule if it mentions the rule's concrete marker. Counts mentions, not correctness.
+own error class per mutation	own error (class|type|enum)|dedicated error|error (class|type) per mutation|its own error
+ADDED_IN_324	ADDED_IN_324
+input lists capped at 100	(≤|<=|max(imum)?|cap(ped)?( at)?|limit(ed)? (to|at)) ?100
+query_cost_map / COST_MAP	query_cost_map|COST_MAP
+Meta.permissions	Meta\.permissions|permissions = \(
+dataloaders	dataloader|DataLoader|Loader\(
+F() / atomic increments	\bF\(
+lock_objects / select_for_update	lock_objects|select_for_update|qs_select_for_update
+traced_atomic_transaction	traced_atomic_transaction
+call_event	call_event
+AddIndexConcurrently / atomic = False	AddIndexConcurrently|atomic = False
+existing Product.rating / RATING sort	Product\.rating|ProductOrderField\.RATING|sorters\.py:163
+test conventions (given/when/then)	given/when/then|given / when / then
+dashboard extract-messages	extract-messages
+dashboard changeset	change:add|changeset
+dashboard schema pin (3.23 / fetch-local-schema)	3\.23|fetch-local-schema|schema-main
+storefront public vs authenticated helpers	executePublicGraphQL|executeAuthenticatedGraphQL
+storefront revalidate route	api/revalidate|revalidate/route

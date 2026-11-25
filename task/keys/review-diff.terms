@@ -1,0 +1,21 @@
+# Automatic coverage of the planted problems in task/keys/review-diff.md. label<TAB>regex (case-insensitive).
+V1 Meta.permissions	Meta\.permissions|permissions = \(
+V2 own error class	own error (class|type|enum)|dedicated error|error (class|type) per mutation|GiftCardBalanceTransferError
+V3 ADDED_IN_324	ADDED_IN_324
+V4 cap at 100	(≤|<=|max(imum)?|cap(ped)?( at)?|limit(ed)? (to|at)|more than) ?100|max_input_size
+V5 F() expressions	\bF\(
+V6 lock (select_for_update / lock_objects)	select_for_update|lock_objects
+V6 traced_atomic_transaction	traced_atomic_transaction
+V7 call_event	call_event
+V8 wrong history event	balance_reset|BALANCE_RESET|reset event
+V9 AddIndexConcurrently	AddIndexConcurrently|atomic = False
+V10 flat tests (no class)	flat|in a class|test class
+V11 redundant name prefix	prefix
+V12 is not None	is not None
+V13 error code via enum .name	\.name\b
+V13 error count	len\(errors\)|list length|error count|number of errors
+V14 given/when/then	given/when/then|given / when / then
+V15 graphene_id undefined	graphene_id
+V15 schema not regenerated	build-schema|schema\.graphql
+V15 missing import in schema.py	import
+V16 BaseInputObjectType	BaseInputObjectType

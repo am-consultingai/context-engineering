@@ -1,0 +1,75 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 2b43d48..0512fff 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -2,7 +2,7 @@
+ 
+ ## Project Overview
+ 
+-Saleor Dashboard is a GraphQL-powered, single-page React application built with TypeScript that serves as the admin interface for the Saleor e-commerce platform. It uses modern web technologies including React 17, @saleor/macaw-ui-next, Apollo Client, and Vite for bundling.
++Saleor Dashboard is a GraphQL-powered, single-page React application built with TypeScript that serves as the admin interface for the Saleor e-commerce platform. It uses modern web technologies including React 18, @saleor/macaw-ui-next, Apollo Client, and Vite for bundling.
+ 
+ ## Development Commands
+ 
+@@ -16,7 +16,7 @@ Saleor Dashboard is a GraphQL-powered, single-page React application built with
+ 
+ Before completing changes make sure you run these commands:
+ 
+-- `pnpm run lint` - Run ESLint with auto-fix on src/ and playwright/ directories
++- `pnpm run lint` - Run ESLint with auto-fix on src/ and playwright/ directories, then `prettier --write` on the whole repo
+ - `pnpm run test:quiet <file_path>` - Run specific test file with console output suppressed
+ - `pnpm run check-types` - Run TypeScript type checking
+ - `pnpm run knip` - Check for unused files/dependencies/exports
+@@ -68,7 +68,7 @@ The codebase follows a feature-based architecture with shared components:
+ 
+ ### Key Technologies
+ 
+-- **React 17** with TypeScript (strict mode disabled for old views using typescript-strict-plugin, new ones should use strict mode)
++- **React 18** with TypeScript (strict mode disabled for old views using typescript-strict-plugin, new ones should use strict mode)
+ - **Apollo Client 3.4** for GraphQL state management
+ - **Vite** for build tooling and development server
+ - **React Hook Form** for form management
+@@ -108,8 +108,8 @@ The codebase follows a feature-based architecture with shared components:
+ 
+ 1. Ensure you have a running Saleor backend instance
+ 2. Configure environment variables as described in `docs/configuration.md`
+-3. Run `pnpm run generate` to generate GraphQL types
+-4. Install dependencies with `pnpm i`
++3. Install dependencies with `pnpm i`
++4. Run `pnpm run generate` to generate GraphQL types (also runs automatically on `pnpm run dev`, `build` and `start`)
+ 
+ ### Adding New Features
+ 
+diff --git a/src/components/ConditionalFilter/AGENTS.md b/src/components/ConditionalFilter/AGENTS.md
+index c994b6c..75a162c 100644
+--- a/src/components/ConditionalFilter/AGENTS.md
++++ b/src/components/ConditionalFilter/AGENTS.md
+@@ -48,9 +48,10 @@ When working with the ConditionalFilter system, especially during API migrations
+ 
+ - **Problem**: UI field names don't always match GraphQL schema field names
+ - **Example**: The `customer` filter UI field maps to `user` in OrderWhereInput, not `userEmail` or `customer`
+-- **Solution**: Check the GraphQL schema and ensure proper mapping in `StaticQueryVarsBuilder.mapFieldNameToGraphQL()`
++- **Solution**: Check the GraphQL schema and ensure proper mapping: `STATIC_WHERE_FIELD_NAME_MAP` / `getWhereFieldName()` in `StaticQueryVarsBuilder.ts`, or a dedicated builder (the `customer` → `user` mapping is in `OrderCustomerIdQueryVarsBuilder.getQueryFieldName()`)
+ - **Files to check**:
+-  - `FiltersQueryBuilder/queryVarsBuilders/StaticQueryVarsBuilder.ts` (line ~88-95)
++  - `FiltersQueryBuilder/queryVarsBuilders/StaticQueryVarsBuilder.ts` (`STATIC_WHERE_FIELD_NAME_MAP`, `getWhereFieldName`)
++  - `FiltersQueryBuilder/queryVarsBuilders/OrderCustomerIdQueryVarsBuilder.ts`
+   - GraphQL schema for the correct field names
+   - Test files for expected field mappings
+ 
+@@ -109,5 +110,4 @@ For more detailed information on each part of the system, please refer to the sp
+ 
+ - **[Query Variable Builders](./FiltersQueryBuilder/queryVarsBuilders/DOCS.md)**: For transforming filter state into GraphQL variables.
+ - **[API Providers & Handlers](./API/DOCS.md)**: For fetching data for filter options.
+-- **[Initial State & Rehydration](./API/initialState/DOCS.md)**: For restoring filter state from a URL.
+ - **[Value Provider & URL Sync](./ValueProvider/DOCS.md)**: For synchronizing state with the URL.
+diff --git a/src/components/ResponsiveTable/AGENTS.md b/src/components/ResponsiveTable/AGENTS.md
+index 78d72bf..eea7ea1 100644
+--- a/src/components/ResponsiveTable/AGENTS.md
++++ b/src/components/ResponsiveTable/AGENTS.md
+@@ -21,4 +21,4 @@ When `data` can be `undefined` (loading), always handle three states explicitly:
+ ## Empty State Types
+ 
+ - **No initial data** → render `<Placeholder>` instead of table
+-- **No search/filter results** → use `filteredItemsCount={0}` prop (built-in empty state inside table)
++- **No results from the table's own `search` input** → use `filteredItemsCount={0}` prop (built-in empty state; it shows only while the table's search has text, not for filters applied outside the table)

@@ -1,0 +1,72 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index d42603e..ad5c7fc 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -76,8 +76,6 @@ Skills are organized as follows:
+ ```
+ src/
+ ├── app/                    # Next.js App Router pages
+-│   ├── [channel]/          # Channel-scoped routes
+-│   │   └── (main)/         # Main layout (header/footer)
+ │   ├── api/                # API routes (og/, revalidate/)
+ │   ├── (storefront)/[channel]/  # Browse, cart, account
+ │   └── (checkout)/checkout/     # Checkout surface
+@@ -135,7 +133,8 @@ NEXT_BUILD_RETRIES=1               # GraphQL retries during build (default: 3, u
+ NEXT_PUBLIC_DEFAULT_CHANNEL=       # Your Saleor channel slug (e.g., "default-channel")
+ 
+ # Multi-channel builds (optional) - discovers additional channels at build time
+-# SALEOR_APP_TOKEN=                # If set, fetches all active channels from API
++# STOREFRONT_CHANNELS=             # Comma-separated channel allowlist (recommended)
++# STOREFRONT_DISCOVER_CHANNELS=true + SALEOR_APP_TOKEN=  # Fetch all active channels from the API
+ 
+ # Note: Product pages are NOT pre-rendered (all on-demand via ISR) due to Cache Components limitations
+ ```
+@@ -184,16 +183,14 @@ Two explicit GraphQL helpers ensure you always know what data access level you'r
+ import { executePublicGraphQL, executeAuthenticatedGraphQL } from "@/lib/graphql";
+ 
+ // Public queries (menus, products, categories) - no auth, only public data
+-await executePublicGraphQL(MenuDocument, {
++// Helpers never throw: they return { ok: true, data } or { ok: false, error }.
++const menu = await executePublicGraphQL(MenuGetBySlugDocument, {
+ 	variables: { slug: "footer" },
+ });
+ 
+ // User queries - requires session cookies
+-try {
+-	const { me } = await executeAuthenticatedGraphQL(CurrentUserDocument, { cache: "no-cache" });
+-} catch {
+-	// Expired token = not logged in
+-}
++const result = await executeAuthenticatedGraphQL(CurrentUserDocument, { cache: "no-cache" });
++const me = result.ok ? result.data.me : null; // not ok (e.g. expired token) = not logged in
+ 
+ // Checkout/cart mutations - requires session cookies
+ await executeAuthenticatedGraphQL(CheckoutAddLineDocument, {
+@@ -235,7 +232,7 @@ useEffect(() => {
+ 
+ | Layer            | TTL          | Purpose                |
+ | ---------------- | ------------ | ---------------------- |
+-| ISR              | 5 min        | Product/category pages |
++| `catalog` cacheLife | revalidate 1 min / stale 5 min / expire 1 hr | Product/category pages |
+ | GraphQL          | 5 min - 1 hr | API responses          |
+ | Static Assets    | 1 year       | JS/CSS bundles         |
+ | Category Lookups | 1 hour       | Slug → ID resolution   |
+diff --git a/skills/saleor-paper-storefront/rules/data-graphql.md b/skills/saleor-paper-storefront/rules/data-graphql.md
+index 8fcc8d8..465cd9e 100644
+--- a/skills/saleor-paper-storefront/rules/data-graphql.md
++++ b/skills/saleor-paper-storefront/rules/data-graphql.md
+@@ -59,10 +59,13 @@ This regenerates TypeScript types. **Always run the appropriate command after an
+ import { ProductDetailsDocument } from "@/gql/graphql";
+ import { executePublicGraphQL } from "@/lib/graphql";
+ 
+-const { product } = await executePublicGraphQL(ProductDetailsDocument, {
++const result = await executePublicGraphQL(ProductDetailsDocument, {
+ 	variables: { slug, channel },
+ 	revalidate: 60,
+ });
++// Helpers return { ok, data | error } and never throw
++if (!result.ok) throw new Error(result.error.message);
++const { product } = result.data;
+ // TypeScript now recognizes product.newField
+ ```
+ 

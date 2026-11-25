@@ -1,0 +1,8 @@
+We're considering renaming the GraphQL field `Product.thumbnail` to
+`Product.primaryImage` in the core API (same arguments and return type).
+
+Before anyone writes code, I need an impact analysis: everything in this
+workspace that would be affected, how each consumer gets updated, what order
+the work has to happen in, and what could break without being caught by
+type-checking or CI. Don't change any code; give me the analysis and a
+rollout plan.

@@ -1,0 +1,33 @@
+# Automatic rule coverage for task/keys/playbook.md. label<TAB>regex (case-insensitive).
+ADDED_IN_324	ADDED_IN_324
+PermissionsField	PermissionsField
+Meta.permissions	Meta\.permissions|permissions = \(
+own error class per mutation	own error (class|type|enum)|dedicated error|error (class|type|enum) per mutation|its own error
+return the mutated object	return(s)? the (created|mutated|updated) object|mutated object
+input lists capped at 100	(≤|<=|max(imum)?|cap(ped)?( at)?|limit(ed)? (to|at)) ?100
+query_cost_map / COST_MAP	query_cost_map|COST_MAP
+dataloaders	dataloader|DataLoader|Loader\(
+call_event	call_event
+F() increments	\bF\(
+update_or_create	update_or_create
+lock_objects	lock_objects
+traced_atomic_transaction	traced_atomic_transaction
+search dirty-marking migration	dirty
+AddIndexConcurrently / atomic = False	AddIndexConcurrently|atomic = False
+pydantic_to_validation_error	pydantic_to_validation_error
+pytest --reuse-db	reuse-db
+given/when/then	given/when/then|given / when / then
+assert error count + enum .name	len\(errors\)|\.name\b
+build-schema	build-schema|get_graphql_schema
+CHANGELOG	CHANGELOG
+dashboard test:quiet	test:quiet
+dashboard generate	pnpm run generate|pnpm generate
+dashboard schema pin / fetch-local-schema	fetch-local-schema
+dashboard extract-messages	extract-messages
+dashboard changesets	change:add|changeset
+dashboard overrides in pnpm-workspace.yaml	pnpm-workspace\.yaml
+dashboard check-types	check-types
+storefront public vs authenticated helpers	executePublicGraphQL|executeAuthenticatedGraphQL
+storefront generate:checkout	generate:checkout|generate:all
+storefront revalidate	revalidate
+port 8001	8001

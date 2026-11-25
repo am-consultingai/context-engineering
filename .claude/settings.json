@@ -9,18 +9,23 @@
       "Bash(./stop.sh:*)",
       "Bash(./stop.sh)",
       "Bash(./reset-envs.sh)",
+      "Bash(./unblind.sh)",
+      "Bash(./unblind.sh:*)",
       "Read",
       "Grep",
       "Glob",
       "Write(runs/**)",
       "Edit(runs/**)",
       "Edit(task/prompt.txt)",
+      "Edit(task/prompt-guided.txt)",
       "Edit(experiment.env)"
     ],
     "deny": [
       "Read(~/.config/context-engineering/**)",
-      "Edit(envs/**)",
-      "Write(envs/**)"
+      "Read(runs/**/.key.json)",
+      "Read(agent-config/generated/labels.env)",
+      "Edit(~/.local/share/saleor-ws/**)",
+      "Write(~/.local/share/saleor-ws/**)"
     ]
   }
 }

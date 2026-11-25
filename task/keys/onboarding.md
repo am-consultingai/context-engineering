@@ -1,0 +1,6 @@
+# Answer key — onboarding (facts in arch/ + code; check every concrete claim)
+Versions: dashboard 3.23.8 (schema pinned 3.23), core 3.24.0-a.0, storefront Next 16/React 19/pnpm 10/Node 24, platform images 3.23, postgres 15, valkey 8.1
+Runtime: API POST /graphql/ host port 8001 (container 8000); dashboard 9000; storefront 3000 (SSR via host.docker.internal:8001); JWT RS256 + /.well-known/jwks.json; storefront 3 credential planes (none/session/app token); webhooks → storefront /api/revalidate (HMAC SALEOR_WEBHOOK_SECRET)
+Codegen: saleor get_graphql_schema → schema.graphql; dashboard codegen-main.ts reads committed schema-main.graphql (pinned 3.23; schema.graphql symlink), staging schema + FF_USE_STAGING_SCHEMA; fetch-local-schema; storefront live introspection (.graphqlrc.ts) + checkout codegen; src/gql gitignored
+Run: ./bootstrap.sh, ./dev/dev.sh up/setup; overlay dev/docker-compose.dev.yml over saleor-platform (don't edit platform); IP filter; image URL Site domain; storefront SSR networking
+CI: saleor tests-and-linters, graphql-inspector (approved-breaking-change), changelog-check; dashboard main.yml QA + update-schema.yml weekday; storefront update_types.yml; not caught: non-type-breaking changes (enum values, nullability), cache typePolicies, stale pinned schema, storefront codegen against live API

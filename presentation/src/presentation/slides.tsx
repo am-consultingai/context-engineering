@@ -76,8 +76,6 @@ function IntroSlide() {
         <Item className="mt-12 flex items-center gap-4 text-base">
           <span className="font-display font-semibold text-ink">{brand.identity.principal}</span>
           <span className="text-white/20">·</span>
-          <span className="text-subtle">{brand.identity.role}</span>
-          <span className="text-white/20">·</span>
           <span className="font-mono text-sm uppercase tracking-widest text-subtle">Jun 2026</span>
         </Item>
       </Stagger>
@@ -415,8 +413,11 @@ export const slides: Slide[] = [
     eyebrow="Takeaways / handout"
     title="What to take home"
     bullets={[
-      "Repo: am-consultingai/Saleor-workspace",
-      "/investigate + repo-investigator + shared settings.json (already committed)",
+      {
+        title: "github.com/am-consultingai/context-engineering",
+        href: "https://github.com/am-consultingai/context-engineering",
+        desc: "The experiment: clone → ./setup-token.sh → ./setup.sh --verify, and rerun it yourself.",
+      },
       "The settings.json vs .local rule",
       "CLAUDE.md template + clone-and-go steps",
     ]}

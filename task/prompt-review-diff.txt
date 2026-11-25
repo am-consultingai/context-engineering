@@ -1,0 +1,122 @@
+Please review this pull request for the core API before it's merged. It adds
+a staff mutation that transfers balance between gift cards. Review it against
+our repo's conventions and for correctness: list every problem you find (with
+the rule or reason, and the fix), then give a merge verdict. Don't change any
+code; just give me the review.
+
+```diff
+--- /dev/null
++++ b/saleor/graphql/giftcard/mutations/gift_card_balance_transfer.py
+@@ -0,0 +1,74 @@
++import graphene
++from django.core.exceptions import ValidationError
++
++from ....giftcard import events
++from ....giftcard.error_codes import GiftCardErrorCode
++from ....giftcard.models import GiftCard
++from ....permission.enums import GiftcardPermissions
++from ...core import ResolveInfo
++from ...core.doc_category import DOC_CATEGORY_GIFT_CARDS
++from ...core.mutations import BaseMutation
++from ...core.scalars import PositiveDecimal
++from ...core.types import GiftCardError, NonNullList
++from ...plugins.dataloaders import get_plugin_manager_promise
++from ..types import GiftCard as GiftCardType
++
++
++class GiftCardBalanceTransferInput(graphene.InputObjectType):
++    source_id = graphene.ID(required=True, description="Source gift card ID.")
++    target_id = graphene.ID(required=True, description="Target gift card ID.")
++    amount = PositiveDecimal(required=True, description="Amount to move.")
++
++
++class GiftCardBalanceTransfer(BaseMutation):
++    gift_cards = NonNullList(GiftCardType, description="Updated gift cards.")
++
++    class Arguments:
++        transfers = NonNullList(
++            GiftCardBalanceTransferInput,
++            required=True,
++            description="Transfers to perform.",
++        )
++
++    class Meta:
++        description = "Transfers balance between gift cards."
++        doc_category = DOC_CATEGORY_GIFT_CARDS
++        error_type_class = GiftCardError
++        error_type_field = "gift_card_errors"
++
++    @classmethod
++    def perform_mutation(cls, _root, info: ResolveInfo, /, *, transfers):
++        user = info.context.user
++        if not user or not user.has_perm(GiftcardPermissions.MANAGE_GIFT_CARD):
++            raise ValidationError("Permission denied.")
++        manager = get_plugin_manager_promise(info.context).get()
++        updated = []
++        for transfer in transfers:
++            source = cls.get_node_or_error(info, transfer["source_id"], only_type="GiftCard")
++            target = cls.get_node_or_error(info, transfer["target_id"], only_type="GiftCard")
++            if source.current_balance_amount < transfer["amount"]:
++                raise ValidationError(
++                    {"amount": ValidationError("Insufficient balance.", code=GiftCardErrorCode.INVALID.value)}
++                )
++            source.current_balance_amount -= transfer["amount"]
++            target.current_balance_amount += transfer["amount"]
++            source.save(update_fields=["current_balance_amount"])
++            target.save(update_fields=["current_balance_amount"])
++            events.gift_card_balance_reset_event(source, None, user, None)
++            events.gift_card_balance_reset_event(target, None, user, None)
++            manager.gift_card_updated(source)
++            manager.gift_card_updated(target)
++            updated.extend([source, target])
++        return GiftCardBalanceTransfer(gift_cards=updated)
+--- a/saleor/graphql/giftcard/schema.py
++++ b/saleor/graphql/giftcard/schema.py
+@@ -140,3 +140,4 @@ class GiftCardMutations(graphene.ObjectType):
+     gift_card_bulk_deactivate = GiftCardBulkDeactivate.Field()
++    gift_card_balance_transfer = GiftCardBalanceTransfer.Field()
+--- /dev/null
++++ b/saleor/giftcard/migrations/0025_giftcard_balance_idx.py
+@@ -0,0 +1,15 @@
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++    dependencies = [("giftcard", "0024_alter_giftcardevent_type")]
++
++    operations = [
++        migrations.AddIndex(
++            model_name="giftcard",
++            index=models.Index(fields=["current_balance_amount"], name="giftcard_balance_idx"),
++        ),
++    ]
+--- /dev/null
++++ b/saleor/graphql/giftcard/tests/mutations/test_gift_card_balance_transfer.py
+@@ -0,0 +1,48 @@
++from .....giftcard.models import GiftCard
++from ....tests.utils import get_graphql_content
++
++MUTATION = """
++mutation Transfer($transfers: [GiftCardBalanceTransferInput!]!) {
++  giftCardBalanceTransfer(transfers: $transfers) {
++    giftCards { id currentBalance { amount } }
++    errors { field code message }
++  }
++}
++"""
++
++
++class TestGiftCardBalanceTransfer:
++    def test_gift_card_balance_transfer_success(self, staff_api_client, gift_card, gift_card_used, permission_manage_gift_card):
++        staff_api_client.user.user_permissions.add(permission_manage_gift_card)
++        variables = {"transfers": [{"sourceId": graphene_id(gift_card), "targetId": graphene_id(gift_card_used), "amount": 5}]}
++        content = get_graphql_content(staff_api_client.post_graphql(MUTATION, variables))
++        assert content["data"]["giftCardBalanceTransfer"]["giftCards"] is not None
++
++    def test_gift_card_balance_transfer_insufficient(self, staff_api_client, gift_card, gift_card_used, permission_manage_gift_card):
++        staff_api_client.user.user_permissions.add(permission_manage_gift_card)
++        variables = {"transfers": [{"sourceId": graphene_id(gift_card), "targetId": graphene_id(gift_card_used), "amount": 10000}]}
++        content = get_graphql_content(staff_api_client.post_graphql(MUTATION, variables))
++        errors = content["data"]["giftCardBalanceTransfer"]["errors"]
++        assert errors[0]["code"] == "INVALID"
+```

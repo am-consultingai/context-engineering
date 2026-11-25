@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Reset both envs (overlay + all child repos) to their baseline. Touches only envs/.
+# Reset both envs (overlay + all child repos) to their baseline. Touches only $LAB_ROOT/<label>/.
 # Usage: ./reset-envs.sh
 source "$(dirname "$0")/lib/common.sh"
 require_setup

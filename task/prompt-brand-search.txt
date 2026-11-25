@@ -1,0 +1,12 @@
+Customers and merchandisers should be able to find products by brand.
+
+- Add a dedicated "brand" text field to products (not an attribute) that a
+  merchandiser can set in the dashboard.
+- Product search must match on brand, both in the dashboard product search
+  and in the storefront search: searching "Acme" finds Acme products.
+  Products that already exist must become searchable by brand too.
+- Storefront category pages get a brand filter, and the backend must be
+  able to filter products by brand efficiently on a large catalog.
+
+Treat this as a real, production-quality feature across the backend, the
+dashboard and the storefront. Before changing any code, give me your plan.

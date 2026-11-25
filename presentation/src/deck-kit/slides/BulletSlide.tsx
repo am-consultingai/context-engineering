@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Eyebrow, Item, SlideShell, Stagger } from "../components/primitives";
 
-export type Bullet = string | { title: string; desc?: string };
+export type Bullet = string | { title: string; desc?: string; /** Makes the title a link. */ href?: string };
 
 export interface BulletSlideProps {
   eyebrow?: string;
@@ -42,7 +42,13 @@ export function BulletSlide({ eyebrow, title, lead, bullets, aside }: BulletSlid
                   <li className="flex gap-4">
                     <span className="mt-2.5 h-2 w-2 shrink-0 rounded-full brand-gradient" />
                     <div>
-                      <span className="text-2xl font-medium text-ink">{item.title}</span>
+                      {"href" in item && item.href ? (
+                        <a href={item.href} target="_blank" rel="noreferrer" className="text-2xl font-medium text-ink underline decoration-white/30 underline-offset-4 transition hover:text-cyan">
+                          {item.title}
+                        </a>
+                      ) : (
+                        <span className="text-2xl font-medium text-ink">{item.title}</span>
+                      )}
                       {item.desc && <p className="mt-1 text-lg font-light text-subtle">{item.desc}</p>}
                     </div>
                   </li>

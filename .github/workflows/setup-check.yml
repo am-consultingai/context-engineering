@@ -1,0 +1,35 @@
+# Checks that a fresh clone sets up out of the box on every supported platform:
+# Linux (also covers WSL), macOS on Intel, and macOS on Apple silicon (stock bash 3.2, BSD tools).
+# Runs setup.sh without --verify (CI has no agent credentials), then a second time to check
+# that re-running is idempotent.
+name: setup-check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["presentation/**"]
+  pull_request:
+    paths-ignore: ["presentation/**"]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-13, macos-latest]   # Linux x64, macOS Intel, macOS Apple silicon
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Show platform
+        run: uname -a; /bin/bash --version | head -1; python3 --version; git --version
+      # /bin/bash explicitly: on macOS that is the stock bash 3.2 users have, not a Homebrew bash 5.
+      - name: setup.sh (fresh)
+        run: /bin/bash ./setup.sh
+      - name: setup.sh (re-run is idempotent)
+        run: /bin/bash ./setup.sh
