@@ -114,7 +114,7 @@ build_overlay() {
     git -C "$root" -c user.name=Workspace -c user.email=workspace@localhost -c commit.gpgsign=false \
     commit -q -m "Workspace baseline"
   git -C "$root" tag baseline
-  ok "$cond: overlay built ($(git -C "$root" ls-files | wc -l) files)"
+  ok "$cond: overlay built ($(git -C "$root" ls-files | wc -l | tr -d " ") files)"
 }
 
 # Which upstream agent docs setup strips from this condition's child repos: all of them for
@@ -167,8 +167,8 @@ strip_child() {
     [ "$ok_f" = 1 ] || die "$name: strip removed an unlisted file: $f"
   done < <(comm -23 <(echo "$before") <(echo "$after"))
   for p in ${paths[@]+"${paths[@]}"}; do [ ! -e "$dst/$p" ] && [ ! -L "$dst/$p" ] || die "$name: $p still on disk"; done
-  [ -z "$patch" ] || ok "  $name: applied doc fixes ($(git -C "$dst" apply --numstat "$patch" 2>/dev/null | wc -l) files, ${patch##*/})"
-  [ "${#paths[@]}" -eq 0 ] || ok "  $name: stripped $(comm -23 <(echo "$before") <(echo "$after") | wc -l) upstream agent-doc files (${paths[*]})"
+  [ -z "$patch" ] || ok "  $name: applied doc fixes ($(git -C "$dst" apply --numstat "$patch" 2>/dev/null | wc -l | tr -d " ") files, ${patch##*/})"
+  [ "${#paths[@]}" -eq 0 ] || ok "  $name: stripped $(comm -23 <(echo "$before") <(echo "$after") | wc -l | tr -d " ") upstream agent-doc files (${paths[*]})"
 }
 
 clone_child() {
